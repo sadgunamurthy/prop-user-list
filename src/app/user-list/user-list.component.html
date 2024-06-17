@@ -1,0 +1,82 @@
+<div class="container">
+    <h1>User List</h1>
+
+    <div>
+      <input type="text" placeholder="Search by name or email" [(ngModel)]="searchQuery" (ngModelChange)="onSearch()">
+    </div>
+
+    <button type="button" class="btn btn-primary mt-3" (click)="toggleForm()" (click)="openForm()">Add User</button>
+    <!-------- form-group ------>
+    <form class="form-wrapper" *ngIf="showForm" [formGroup]="nameForm" (ngSubmit)="onSubmit()">
+        <div class="mobile-form">
+          <h2 class="text-center text-info">{{formHeader}}</h2>
+
+        <div class="group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" formControlName="name">
+          <div *ngIf="nameForm.get('name')?.errors?.['required'] && nameForm.get('name')?.touched" class="text-danger">
+            Name is required.
+          </div>
+          <div *ngIf="nameForm.get('name')?.errors?.['maxlength'] && nameForm.get('name')?.touched" class="text-danger">
+            Name should be at most 8 characters.
+          </div>
+          <div *ngIf="nameForm.get('name')?.errors?.['pattern'] && nameForm.get('name')?.touched" class="text-danger">
+            Only alphabets are allowed in the name.
+          </div>
+        </div>
+      
+        <div class="group">
+          <label for="email">Email:</label>
+          <input type="text" id="email" name="email" formControlName="email">
+          <div *ngIf="nameForm.get('email')?.errors?.['required'] && nameForm.get('email')?.touched" class="text-danger">
+            Email is required.
+          </div>
+        </div>
+      
+        <div class="group">
+          <label for="role">Role:</label>
+          <input type="text" id="role" name="role" formControlName="role">
+          <div *ngIf="nameForm.get('role')?.errors?.['required'] && nameForm.get('role')?.touched" class="text-danger">
+            Role is required.
+          </div>
+        </div>
+      
+        <!-- Add submit button and other form elements as needed -->
+        <!-- <button type="submit" [disabled]="nameForm.invalid">Submit</button> -->
+
+        <div class="action">
+          <button class="btn btn-primary save" (click)="saveUser()">Save Changes </button>
+          <button class="btn btn-danger save" (click)="closeForm()">Cancel</button>
+        </div>
+   </div>
+  </form>
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th (click)="sortData('id')">ID</th>
+          <th (click)="sortData('name')">Name</th>
+          <th (click)="sortData('email')">Email</th>
+          <th (click)="sortData('role')">Role</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of sortedUsers | paginate: { itemsPerPage: itemsPerPage, currentPage: page }">
+          <td>{{ user.id }}</td>
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.role }}</td>
+          <td>
+            <button class="btn btn-primary" (click)="openForm(user)">Edit</button>
+          </td>
+          <td>
+            <button class="btn btn-danger" (click)="deleteUser(user.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls (pageChange)="page = $event"></pagination-controls>
+  </div>
+  

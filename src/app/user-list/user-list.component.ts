@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { UserService } from '../user.service';
 import { User } from '../user.model';
 @Component({
@@ -24,7 +24,12 @@ export class UserListComponent implements OnInit {
   constructor(private userService: UserService, private formBuilder: FormBuilder) { 
     this.nameForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.maxLength(8), Validators.pattern(/^[a-zA-Z]+$/)]],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [
+        Validators.required,
+        Validators.email,
+        Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')
+      ]],
+    
       role: ['', Validators.required],
     });
   }
@@ -37,9 +42,15 @@ export class UserListComponent implements OnInit {
 
   }
 
+  
+
   get formControls() {
     return this.nameForm.controls;
   }
+  
+  // get emailid() {
+  //   return this.nameForm.controls;
+  // }
 
   deleteUser(id: number): void {
     if (confirm('Are you sure you want to delete this user?')) {

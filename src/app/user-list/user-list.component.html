@@ -24,14 +24,24 @@
             Only alphabets are allowed in the name.
           </div>
         </div>
-      
+
         <div class="group">
+          <label for="email">Email:</label>
+          <input type="text" id="email" formControlName="email" placeholder="Enter your email">
+          <div *ngIf="nameForm.get('email')?.touched && nameForm.get('email')?.invalid" class="text-danger">
+            <div *ngIf="nameForm.get('email')?.errors?.['required']">Email is required.</div>
+            <div *ngIf="nameForm.get('email')?.errors?.['email']">Email must be a valid email address.</div>
+            <div *ngIf="nameForm.get('email')?.errors?.['pattern']">Email must be in a valid email address format.</div>
+          </div>
+        </div>
+      
+        <!-- <div class="group">-----------------------------------------------------------
           <label for="email">Email:</label>
           <input type="text" id="email" name="email" formControlName="email">
           <div *ngIf="nameForm.get('email')?.errors?.['required'] && nameForm.get('email')?.touched" class="text-danger">
             Email is required.
           </div>
-        </div>
+        </div> -->
       
         <div class="group">
           <label for="role">Role:</label>
